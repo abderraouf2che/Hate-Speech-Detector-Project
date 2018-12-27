@@ -99,7 +99,6 @@ def sent_negation(sentence):
                 new_st.append(lem.lemmatize(word[0],"v"))
         elif word[1]=='MD':
             if tags3[i+1][0] in ['not','n\'t']:
-                print(tags3[i+1][0])
                 new_st.append(word[0])
 
             else:
