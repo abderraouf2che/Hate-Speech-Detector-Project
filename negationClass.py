@@ -45,80 +45,78 @@ def sent_negation(sentence):
     
     lem=WordNetLemmatizer()
     tags3=pos_tag(word_tokenize(sentence))
-
+    tags3.append((" "," "))
     new_st=[]
     for i,word in enumerate(tags3):
+        try:
+            if word[1]=='VBP':
+                if word[0] in ['am','are','have']:
+                    if tags3[i+1][1]=='JJ':
+                        new_st.append(word[0])
+                        pass
+                    else:
+                        new_st.append(word[0])
+                        new_st.append('not')
 
-        if word[1]=='VBP':
-            if word[0] in ['am','are','have']:
-                if tags3[i+1][1]=='JJ':
-                    new_st.append(word[0])
-                    pass
                 else:
-                    new_st.append(word[0])
-                    new_st.append('not')
+                    w=word[0]
+                    a=get_antonyms(w)
+                    if len(a)>0:
+                        new_st.append(a[0])
+                    else:
+                        new_st.append('do not')
+                        new_st.append(word[0])
 
-            else:
+            elif word[1]=='JJ':
                 w=word[0]
                 a=get_antonyms(w)
                 if len(a)>0:
                     new_st.append(a[0])
                 else:
-                    new_st.append('do not')
-                    new_st.append(word[0])
+                    if tags3[i-1][0]=='the':
+                        new_st.append('non')
+                        new_st.append(word[0])
+                    else:
+                        new_st.append('not')
+                        new_set.append(word[0])
 
-        elif word[1]=='JJ':
-            w=word[0]
-            a=get_antonyms(w)
-            if len(a)>0:
-                new_st.append(a[0])
-            else:
-                if tags3[i-1][0]=='the':
-                    new_st.append('non')
-                    new_st.append(word[0])
+            elif word[1]=='VBZ':
+                if word[0] in ["'s",'is','has']:
+                    if tags3[i+1][1]=='JJ':
+                        new_st.append(word[0])
+                        pass
+                    else:
+                        new_st.append(word[0])
+                        new_st.append('not')
+
                 else:
-                    new_st.append('not')
-                    new_set.append(word[0])
+                    new_st.append('does not')
+                    new_st.append(lem.lemmatize(word[0],"v"))
+            elif word[1]=='VBD':
+                if word[0] in ['was','were']:
+                    if tags3[i+1][1]=='JJ':
+                        new_st.append(word[0])
+                        pass
+                    else:
+                        new_st.append(word[0])
+                        new_st.append('not')
+                else:
+                    new_st.append('did not')
+                    new_st.append(lem.lemmatize(word[0],"v"))
+            elif word[1]=='MD':
+                if tags3[i+1][0] in ['not','n\'t']:
 
-        elif word[1]=='VBZ':
-            if word[0] in ["'s",'is','has']:
-                if tags3[i+1][1]=='JJ':
                     new_st.append(word[0])
-                    pass
+
                 else:
                     new_st.append(word[0])
                     new_st.append('not')
-
+            elif word[0] in ['not','n\'t']:
+                pass
             else:
-                new_st.append('does not')
-                new_st.append(lem.lemmatize(word[0],"v"))
-        
-	elif word[1]=='VBD':
-            if word[0] in ['was','were']:
-                if tags3[i+1][1]=='JJ':
-                    new_st.append(word[0])
-                    pass
-                else:
-                    new_st.append(word[0])
-                    new_st.append('not')
-            else:
-                new_st.append('did not')
-                new_st.append(lem.lemmatize(word[0],"v"))
-        
-	elif word[1]=='MD':
-            if tags3[i+1][0] in ['not','n\'t']:
-                print(tags3[i+1][0])
-                new_st.append(word[0])
-
-            else:
-                new_st.append(word[0])
-                new_st.append('not')
-        
-	elif word[0] in ['not','n\'t']:
+                new_st.append(tags3[i][0])
+        except:
             pass
-        
-	else:
-            new_st.append(tags3[i][0])
     return " ".join(new_st)
 
 
