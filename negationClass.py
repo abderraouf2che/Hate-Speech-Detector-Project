@@ -11,7 +11,7 @@ def get_antonyms(word):
 		for l in syn.lemmas():
 			if l.antonyms():
 				antonyms.append(l.antonyms()[0].name())
-	return set(antonyms)
+	return sorted(set(antonyms))
 
 
 
@@ -59,20 +59,26 @@ def sent_negation(sentence):
                     new_st.append('not')
 
             else:
-                w=Word(word[0])
-                if len(w.antonyms())>0:
-                    new_st.append(w.antonyms()[0])
+                w=word[0]
+                a=get_antonyms(w)
+                if len(a)>0:
+                    new_st.append(a[0])
                 else:
                     new_st.append('do not')
                     new_st.append(word[0])
 
         elif word[1]=='JJ':
-            w=Word(word[0])
-            if len(w.antonyms())>0:
-                new_st.append(w.antonyms()[0])
+            w=word[0]
+            a=get_antonyms(w)
+            if len(a)>0:
+                new_st.append(a[0])
             else:
-                new_st.append('not')
-                new_st.append(word[0])
+                if tags3[i-1][0]=='the':
+                    new_st.append('non')
+                    new_st.append(word[0])
+                else:
+                    new_st.append('not')
+                    new_set.append(word[0])
 
         elif word[1]=='VBZ':
             if word[0] in ["'s",'is','has']:
@@ -86,7 +92,8 @@ def sent_negation(sentence):
             else:
                 new_st.append('does not')
                 new_st.append(lem.lemmatize(word[0],"v"))
-        elif word[1]=='VBD':
+        
+	elif word[1]=='VBD':
             if word[0] in ['was','were']:
                 if tags3[i+1][1]=='JJ':
                     new_st.append(word[0])
@@ -97,16 +104,20 @@ def sent_negation(sentence):
             else:
                 new_st.append('did not')
                 new_st.append(lem.lemmatize(word[0],"v"))
-        elif word[1]=='MD':
+        
+	elif word[1]=='MD':
             if tags3[i+1][0] in ['not','n\'t']:
+                print(tags3[i+1][0])
                 new_st.append(word[0])
 
             else:
                 new_st.append(word[0])
                 new_st.append('not')
-        elif word[0] in ['not','n\'t']:
+        
+	elif word[0] in ['not','n\'t']:
             pass
-        else:
+        
+	else:
             new_st.append(tags3[i][0])
     return " ".join(new_st)
 
