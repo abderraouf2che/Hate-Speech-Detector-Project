@@ -80,7 +80,9 @@ def sent_negation(sentence):
             elif word[1]=='JJ':
                 w=word[0]
                 a=get_antonyms(w)
-                if len(a)>0:
+                if w=='i':
+                    new_st.append(w)
+                elif len(a)>0:
                     new_st.append(a[0])
                 else:
                     if tags3[i-1][0]=='the':
