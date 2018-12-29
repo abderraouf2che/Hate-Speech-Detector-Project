@@ -54,10 +54,20 @@ def sent_negation(sentence):
                     if tags3[i+1][1]=='JJ':
                         new_st.append(word[0])
                         pass
+                    elif tags3[i+1][0] in ['not','n\'t']:
+                        new_st.append(word[0])
+                        
                     else:
                         new_st.append(word[0])
                         new_st.append('not')
 
+                elif word[0] in ['do','did']:
+                    if tags3[i+1][0] in ['not','n\'t']:
+                        new_st.append(word[0])
+                        
+                    else:
+                        new_st.append(word[0])
+                        new_st.append('not')
                 else:
                     w=word[0]
                     a=get_antonyms(w)
@@ -81,10 +91,12 @@ def sent_negation(sentence):
                         new_set.append(word[0])
 
             elif word[1]=='VBZ':
-                if word[0] in ["'s",'is','has']:
+                if word[0] in ["'s",'is','has','does']:
                     if tags3[i+1][1]=='JJ':
                         new_st.append(word[0])
                         pass
+                    elif tags3[i+1][0] in ['not','n\'t']:
+                        new_st.append(word[0])
                     else:
                         new_st.append(word[0])
                         new_st.append('not')
