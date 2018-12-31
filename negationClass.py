@@ -50,7 +50,7 @@ def sent_negation(sentence):
     for i,word in enumerate(tags3):
         try:
             if word[1]=='VBP':
-                if word[0] in ['am','are','have']:
+                if word[0] in ['am','are','have',"'m","'re"]:
                     if tags3[i+1][1]=='JJ':
                         new_st.append(word[0])
                         pass
@@ -78,19 +78,21 @@ def sent_negation(sentence):
                         new_st.append(word[0])
 
             elif word[1]=='JJ':
-                w=word[0]
-                a=get_antonyms(w)
-                if w=='i':
-                    new_st.append(w)
+                
+                a=get_antonyms(word[0])
+                if word[0]=='i':
+                    new_st.append(word[0])
+                    
                 elif len(a)>0:
                     new_st.append(a[0])
+                    pass
                 else:
                     if tags3[i-1][0]=='the':
                         new_st.append('non')
                         new_st.append(word[0])
                     else:
                         new_st.append('not')
-                        new_set.append(word[0])
+                        new_st.append(word[0])
 
             elif word[1]=='VBZ':
                 if word[0] in ["'s",'is','has','does']:
