@@ -107,151 +107,120 @@ print('===========================  Building Pipelines for Data Classification a
 
 print('===========================   Naive Bayes =====================')
 
-######
-# for Count vectors
-clf = Pipeline([
-    ('vect',count_vect),
-    ('clf', naive_bayes.MultinomialNB()),
-])
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC for Naive Bayes with word count Features: %.3f' %auc)
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
+
+vectorizers=[(count_vect,'count_vectorizer'),(tfidf_vect,'tfidf_vectorizer_word'),(tfidf_vect_ngram,'tfidf_vectorizer_ngram'),(tfidf_vect_ngram_chars,'tfidf_vectorizer_ngram_chars')]
 
 ######
-### Naive Bayes for TFidf word level
-clf = Pipeline([
-    ('vect',tfidf_vect),
+#Naive Bayes for all features:
+for vectorizer in vectorizers:
+  print(vectorizer[1])
+  clf = Pipeline([
+    ('vect',vectorizer[0]),
     ('clf', naive_bayes.MultinomialNB()),
-])
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
+  ])
+  clf = clf.fit(train_comments['comment'], train_comments['attack'])
+  # show accuracy Measure
+  auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
+  
+  print('Test ROC AUC for'+'vectorizers[1]'+': %.3f' %auc)
+  #testing a sentence:
+  print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
+  print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
+  print('\n')
 
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC for Naive Bayes with Tfidf word level features: %.3f' %auc)
+### Results:
+# count_vectorizer
+# Test ROC AUC forvectorizers[1]: 0.860
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [ True]
 
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
 
-######
-### Naive Bayes for TFidf ngram
-clf = Pipeline([
-    ('vect',tfidf_vect_ngram),
-    ('clf', naive_bayes.MultinomialNB()),
-])
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
+# tfidf_vectorizer
+# Test ROC AUC forvectorizers[1]: 0.939
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [ True]
 
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC for Naive Bayes with Tfidf ngram features : %.3f' %auc)
 
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
+# tfidf_vectorizer_ngram
+# Test ROC AUC forvectorizers[1]: 0.877
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [ True]
 
-### Naive Bayes for TFidf ngram character level
 
-clf = Pipeline([
-    ('vect',tfidf_vect_ngram_chars),
-    ('clf', naive_bayes.MultinomialNB()),
-])
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
-
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC Naive Bayes for TFidf ngram character level:  %.3f' %auc)
-
-#testing a sentence:
-clf.predict(['I hate my life, Pierre muttered, wincing'])
-
+# tfidf_vectorizer_ngram_chars
+# Test ROC AUC forvectorizers[1]: 0.911
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [False]
 
 print('===========================   Linear Classifier =====================')
 
 
 # Linear Classifier Pipeline
 
-########
-#on Count Vectors
+#Linear Classifier for all features:
+for vectorizer in vectorizers:
+  print(vectorizer[1])
+  clf = Pipeline([
+    ('vect',vectorizer[0]),
+    ('clf', linear_model.LogisticRegression()),
+  ])
+  clf = clf.fit(train_comments['comment'], train_comments['attack'])
+  # show accuracy Measure
+  auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
+  
+  print('Test ROC AUC for'+'vectorizers[1]'+': %.3f' %auc)
+  #testing a sentence:
+  print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
+  print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
+  print('\n')
+
+#Results:
+
+# count_vectorizer
+# Test ROC AUC forvectorizers[1]: 0.932
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [False]
+# tfidf_vectorizer
+# Test ROC AUC forvectorizers[1]: 0.958
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [ True]
+# tfidf_vectorizer_ngram
+# Test ROC AUC forvectorizers[1]: 0.882
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [ True]
+# tfidf_vectorizer_ngram_chars
+# Test ROC AUC forvectorizers[1]: 0.956
+# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# [False]
+
+print('========================= . SVM  Classifier ==================')
+
+#### SVM on count vectors:
+# SVM Classifier Pipeline
+#on word count vector
 
 clf = Pipeline([
     ('vect',count_vect),
-    ('clf', linear_model.LogisticRegression()),
+    ('clf', svm.SVC(gamma='scale',probability=True)
+),
 ])
+#SVM SVC Classifier for all features:
+for vectorizer in vectorizers:
+  print(vectorizer[1])
+  clf = Pipeline([
+    ('vect',vectorizer[0]),
+    ('clf', svm.SVC(gamma='scale',probability=True),
+  ])
+  clf = clf.fit(train_comments['comment'], train_comments['attack'])
+  # show accuracy Measure
+  auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
+  
+  print('Test ROC AUC for'+'vectorizers[1]'+': %.3f' %auc)
+  #testing a sentence:
+  print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
+  print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
+  print('\n')
 
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
-
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC Linear Classifier on count vectors: %.3f' %auc)
-
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
-
-
-#########
-# Linear Classifier Pipeline
-#on TFidf
-
-clf = Pipeline([
-    ('vect',tfidf_vect),
-    ('clf', linear_model.LogisticRegression()),
-])
-
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
-
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC for Linear Classifier Pipeline on TFidf: %.3f' %auc)
-
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
-
-######
-# Linear Classifier Pipeline
-#on TFidf ngram
-
-clf = Pipeline([
-    ('vect',tfidf_vect_ngram),
-    ('clf', linear_model.LogisticRegression()),
-])
-
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
-
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC Linear Classifier Pipeline on TFidf ngram: %.3f' %auc)
-
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
-
-#####
-# Linear Classifier Pipeline
-#on TFidf
-
-clf = Pipeline([
-    ('vect',tfidf_vect_ngram_chars),
-    ('clf', linear_model.LogisticRegression()),
-])
-
-#fit the model
-clf = clf.fit(train_comments['comment'], train_comments['attack'])
-
-# show accuracy Measure
-auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
-print('Test ROC AUC Linear Classifier Pipeline on TFidf ngram character level: %.3f' %auc)
-
-#testing a sentence:
-clf.predict(['No, I hate my life, Pierre muttered, wincing'])
-
-####
 
 
 
