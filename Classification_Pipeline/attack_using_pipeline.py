@@ -122,7 +122,7 @@ for vectorizer in vectorizers:
   # show accuracy Measure
   auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
   
-  print('Test ROC AUC for'+'vectorizers[1]'+': %.3f' %auc)
+  print('Test ROC AUC for '+vectorizer[1]+': %.3f' %auc)
   #testing a sentence:
   print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
   print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
@@ -168,7 +168,7 @@ for vectorizer in vectorizers:
   # show accuracy Measure
   auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
   
-  print('Test ROC AUC for'+'vectorizers[1]'+': %.3f' %auc)
+  print('Test ROC AUC for '+vectorizer[1]+': %.3f' %auc)
   #testing a sentence:
   print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
   print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
@@ -215,7 +215,7 @@ for vectorizer in vectorizers:
   # show accuracy Measure
   auc = roc_auc_score(valid_comments['attack'], clf.predict_proba(valid_comments['comment'])[:, 1])
   
-  print('Test ROC AUC for'+'vectorizers[1]'+': %.3f' %auc)
+  print('Test ROC AUC for '+vectorizer[1]+': %.3f' %auc)
   #testing a sentence:
   print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
   print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
