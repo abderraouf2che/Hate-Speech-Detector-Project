@@ -9,15 +9,16 @@ def test_bin(fitted_model)
   text=text.strip()
   text=text.split('.')
 
-  model=
+  model=fitted_model
   all_sen=""
   for sen in text:
   #     x = clf.predict([sen])
       x=count_vect.transform([sen])
 
-      x=a.predict(x)
+      x=model.predict(x)
       if x==True:
-          all_sen=all_sen+sen+' 1'
-      else:
+        all_sen=all_sen+sen+' 1'
+
+        
       
-  print(all_sen)
+  print('detected sentences :'+ all_sen)
