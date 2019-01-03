@@ -41,9 +41,11 @@ toxicity=clean_text(toxicity)
 aggression=clean_text(aggression)
 
 ### Negating
-with open('negated_attack.csv','w') as file:
-    for i in range(len(dataframe)):
-        line=sent_negation(dataframe.values[i][0])
-        file.write(line)
-        file.write('\n')
+outputs=[[attack,'negated_attack.csv'],[toxicity,'negated_toxicity.csv'],[aggression,'negated_aggression.csv']]
+for output in outputs:
+	with open(output[1],'w') as file:
+	    for i in range(len(output[0])):
+	        line=sent_negation(output[0].values[i][0])
+	        file.write((line.encode('ascii','ignore')).decode('utf-8'))
+	        file.write('\n')
 
