@@ -31,7 +31,7 @@ def invert_simple(sent):
 example:
 sent="i don't like cooking, it isn't good"
 print(invert_simple(sent))	
-''''
+'''
 
 
 
