@@ -22,8 +22,8 @@ agg_annotations = pd.read_csv('aggression_annotations.tsv',  sep = '\t')
 
 # labels a comment as an atack if the majority of annoatators did so
 attack_labels = attack_annotations.groupby('rev_id')['attack'].mean() > 0.5
-tox_labels = tox_annotations.groupby('rev_id')['attack'].mean() > 0.5
-agg_labels = agg_annotations.groupby('rev_id')['attack'].mean() > 0.5
+tox_labels = tox_annotations.groupby('rev_id')['toxicity'].mean() > 0.5
+agg_labels = agg_annotations.groupby('rev_id')['aggression'].mean() > 0.5
 
 # join labels and comments
 attack_comments['attack'] = attack_labels
