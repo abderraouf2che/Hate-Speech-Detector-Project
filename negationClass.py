@@ -50,7 +50,7 @@ def sent_negation(sentence):
     for i,word in enumerate(tags3):
         try:
             if word[1]=='VBP':
-                if word[0] in ['am','are','have',"'m","'re","'ve","ve","m"]:
+                if word[0] in ['am','are','have',"'m","'re","'ve","ve","m",'re','im']:
                     if tags3[i+1][1]=='JJ':
                         new_st.append(word[0])
                         pass
