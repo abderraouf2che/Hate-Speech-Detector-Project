@@ -209,7 +209,7 @@ for vectorizer in vectorizers:
   print(vectorizer[1])
   clf = Pipeline([
     ('vect',vectorizer[0]),
-    ('clf', svm.SVC(gamma='scale',probability=True),
+    ('clf', svm.SVC(gamma='scale',probability=True)),
   ])
   clf = clf.fit(train_comments['comment'], train_comments['attack'])
   # show accuracy Measure
