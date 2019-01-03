@@ -2,8 +2,8 @@ import urllib
 from inscriptis import get_text
 
 
-def test_bin(fitted_model):
-  url = "https://sentence.yourdictionary.com/hate"
+def test_bin(fitted_model,link_web):
+  url = link_web
   html = urllib.request.urlopen(url).read().decode('utf-8')
   text = get_text(html)
   text=text.strip()
@@ -21,8 +21,8 @@ def test_bin(fitted_model):
   print('detected sentences :'+ all_sen)
 
   
-def testing_multi(fitted_model):
-  url = "https://sentence.yourdictionary.com/hate"
+def testing_multi(fitted_model, link_web):
+  url =link_web
   html = urllib.request.urlopen(url).read().decode('utf-8')
   text = get_text(html)
   text=text.strip()
