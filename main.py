@@ -31,9 +31,9 @@ tox_comments['attack'] = tox_labels
 agg_comments['attack'] = agg_labels
 
 ## take just the attack labeled sentence so to negate them:
-attack=attack_comments.query('attack==True')
-toxicity=tox_comments.query('attack==True')
-aggression=agg_comments.query('attack==True')
+attack=attack_comments
+toxicity=tox_comments
+aggression=agg_comments
 
 ### Cleaning
 attack=clean_text(attack)
