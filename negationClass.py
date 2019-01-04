@@ -42,7 +42,7 @@ from nltk import word_tokenize, pos_tag
 sentence='He told us a very exciting adventure story.'
 
 def sent_negation(sentence):
-    
+    opinion_list=['think','thinks','agree','disagree','agrees','agreed','disagrees','thought','thought']
     lem=WordNetLemmatizer()
     tags3=pos_tag(word_tokenize(sentence))
     tags3.append((" "," "))
@@ -50,7 +50,9 @@ def sent_negation(sentence):
     for i,word in enumerate(tags3):
         try:
             if word[1]=='VBP':
-                if word[0] in ['am','are','have',"'m","'re","'ve","ve","m",'re','im']:
+                if word[0] in opinion_list:
+                    new_st.append(word[0])
+                elif word[0] in ['am','are','have',"'m","'re","'ve","ve","m",'re','im']:
                     if tags3[i+1][1]=='JJ':
                         new_st.append(word[0])
                         pass
