@@ -20,5 +20,9 @@ def random_sent(n_sentences=2):
                 break
     return random_sents
 
-
-text3=random_sent()
+## write into csv
+text=random_sent()
+with open('rand.csv','w') as file:
+	    for line in text:
+	        file.write((line.encode('ascii','ignore')).decode('utf-8'))
+	        file.write('\n')
