@@ -15,7 +15,6 @@ def random_sent(n_sentences=2):
     # print(index) 
         for i,line in enumerate(text):
             if ' is ' in line:
-                print(text[i])
                 random_sents.append(text[i])
                 break
     return random_sents
