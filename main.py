@@ -8,8 +8,7 @@ from sklearn.metrics import roc_auc_score
 import re
 from Data_prep import *
 from negationClass import *
-from inscriptis import get_text
-import urllib.request
+from randomArticle import *
 
 
 ########## 2.a Negation of attack, Toxicity and aggression ####### 
@@ -54,30 +53,7 @@ for output in outputs:
 	        file.write('\n')
 
 ########## 2.b Generating random sentences from Wikipedia ####### 
-def random_sent(n_sentences=1000):
-    n=n_sentences
-    random_sents=[]
-    with open('randomly.csv','w') as file:
-        try:
-            for i in range(n):
-                url = "http://en.wikipedia.org/wiki/Special:Random"
-                html = urllib.request.urlopen(url).read().decode('utf-8')
-                text = get_text(html)
 
-                text=text.split('\n')
-            # index=text.index('Jump to navigation Jump to search')
-            # print(index) 
-                for i,line in enumerate(text):
-                    if ' is ' in line:
+random_dataset=random_sent()
 
-                        line=text[i]
-                        random_sents.append(line)
-                        file.write((line.encode('ascii','ignore')).decode('utf-8'))
-                        file.write('\n')
-                        
-                        break
-        except:
-            pass
-    return random_sents
 
-random_sent()
