@@ -38,7 +38,7 @@ def testing_multi(fitted_model, link_web):
       x=count_vect.transform([sen])
 
       x=model.predict(x)
-      if x==True:
+      if x==1:
         all_sen=all_sen+sen+' 1'
       elif x==2:
         all_sen=all_sen+sen+' 2'
