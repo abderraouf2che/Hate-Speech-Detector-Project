@@ -53,7 +53,9 @@ for output in outputs:
 	        file.write('\n')
 
 ########## 2.b Generating random sentences from Wikipedia ####### 
+## it takes time to generate thousands of sentences, since it require connection for each sentence.
+#number_sents=10000
+#random_dataset=random_sent(number_sents)
 
-random_dataset=random_sent()
 
 
