@@ -26,11 +26,12 @@ def random_sent(n_iters=1000):
                 if ' is ' in line:
 
                     line=text[i]
-                    if line[0:8]!='  * Text':
+                    if 'Wikipedia' not in line:
+                        if'section is empty' not in line:
 
-                        random_sents.append(line)
-                        file.write((line.encode('ascii','ignore')).decode('utf-8'))
-                        file.write('\n')
+                            random_sents.append(line)
+                            file.write((line.encode('ascii','ignore')).decode('utf-8'))
+                            file.write('\n')
                     
                     # break
 
