@@ -2,21 +2,35 @@
 from inscriptis import get_text
 import urllib.request
 
-def random_sent(n_sentences=2):
-    n=n_sentences
-    random_sents=[]
-    for i in range(n):
-        url = "http://en.wikipedia.org/wiki/Special:Random"
-        html = urllib.request.urlopen(url).read().decode('utf-8')
-        text = get_text(html)
 
-        text=text.split('\n')
-    # index=text.index('Jump to navigation Jump to search')
-    # print(index) 
-        for i,line in enumerate(text):
-            if ' is ' in line:
-                random_sents.append(text[i])
-                break
+def random_sent(n_iters=1000):
+	'''
+	This function generates random sentences from random articles from wikipedia database,
+	it stores the dataset in both variable and csv file so when needed.
+	'''
+    n=n_iters
+    random_sents=[]
+    with open('randomly.csv','w') as file:
+        for i in range(n):
+            url = "http://en.wikipedia.org/wiki/Special:Random"
+            html = urllib.request.urlopen(url).read().decode('utf-8')
+            text = get_text(html)
+
+            text=text.split('\n')
+        # index=text.index('Jump to navigation Jump to search')
+        # print(index) 
+            for i,line in enumerate(text):
+                if ' is ' in line:
+
+                    line=text[i]
+                    if line[0:8]!='  * Text':
+
+                        random_sents.append(line)
+                        file.write((line.encode('ascii','ignore')).decode('utf-8'))
+                        file.write('\n')
+                    
+                    # break
+
     return random_sents
 
 ## write into csv
