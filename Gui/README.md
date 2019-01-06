@@ -1,5 +1,5 @@
 # Instruction to run django web project for Hate speech analysis 
-#Donwload the hole project <br>
+#Donwload the project <br>
 https://drive.google.com/open?id=1iHw8GxVWLlavqQpXwY6zhwLTeYdnfdHU <br>
 <strong>Instruiton for window user <br>
 unzip the donwloaded file<br>
