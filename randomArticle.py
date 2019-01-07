@@ -21,12 +21,13 @@ def random_sent(n_iters=1000):
             text = get_text(html)
 
             text=text.split('\n')
-		#loop in the text and extract sentences, add them to random_sents and add them to the csv file :
+		#loop in the text and extract sentences( or paragraphs), add them to random_sents and add them to the csv file :
             for i,line in enumerate(text):
                 if ' is ' in line:
 
                     line=text[i]
-                    if 'Wikipedia' not in line:
+		#filter some trivially repeated sentences.
+                    if 'Wikipedia' not in line and 'Wikidata' not in line:
                         if'section is empty' not in line:
 
                             random_sents.append(line)
