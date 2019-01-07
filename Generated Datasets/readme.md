@@ -1,4 +1,6 @@
-**links for the dataset:
+Generated Sentences and paragraphs from wikipedia dataset is provided above.
+
+**links for the datasets Negations:
 
 ***1.Negated Attack dataset:
 
