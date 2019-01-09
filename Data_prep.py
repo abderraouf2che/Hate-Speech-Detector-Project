@@ -22,3 +22,15 @@ def clean_text(data):
 
 	data_frame['comment']=data_frame['comment'].apply((lambda x: re.sub(' +',' ',x)))
 	return data_frame
+
+def prep_comments(comments, annotations, name):
+	# labels a comment as an atack if the majority of annoatators did so
+	labels =annotations.groupby('rev_id')[name].mean() > 0.5
+	
+	# join labels and comments
+	comments[name] = labels
+	
+
+	### Cleaning
+	return clean_text(comments)
+	
