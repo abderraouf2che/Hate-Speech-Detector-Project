@@ -33,9 +33,8 @@ download_file(ANNOTATIONS_URL, 'aggression_annotations.tsv')
 # Read data files
 comments = pd.read_csv('aggression_annotated_comments.tsv', sep = '\t', index_col = 0)
 annotations = pd.read_csv('aggression_annotations.tsv',  sep = '\t')
-#download word embedding vector
-wiki_link='https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki-news-300d-1M.vec.zip'
-download_file(wiki_link, 'wiki-news-300d-1M.vec')
+#download word embedding vector manually using the link :
+#wiki_link='https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki-news-300d-1M.vec.zip'
 
 # labels a comment as an atack if the majority of annoatators did so
 labels = annotations.groupby('rev_id')['aggression'].mean() > 0.5
@@ -121,36 +120,36 @@ for vectorizer in vectorizers:
   clf = clf.fit(train_comments['comment'], train_comments['aggression'])
   # show accuracy Measure
   auc = roc_auc_score(valid_comments['aggression'], clf.predict_proba(valid_comments['comment'])[:, 1])
-  
   print('Test ROC AUC for '+vectorizer[1]+': %.3f' %auc)
   #testing a sentence:
-  print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
-  print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
+  print("test for sentence :  == whoa == you are a big fat idot stop spamming my userspace")
+  print(clf.predict([' == whoa == you are a big fat idot stop spamming my userspace']))
   print('\n')
+    
 
 ### Results:
 # count_vectorizer
-# Test ROC AUC forvectorizers[1]: 0.860
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# Test ROC AUC for count_vectorizer: 0.850
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
 # [ True]
 
 
-# tfidf_vectorizer
-# Test ROC AUC forvectorizers[1]: 0.939
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# tfidf_vectorizer_word
+# Test ROC AUC for tfidf_vectorizer_word: 0.931
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
 # [ True]
 
 
 # tfidf_vectorizer_ngram
-# Test ROC AUC forvectorizers[1]: 0.877
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# Test ROC AUC for tfidf_vectorizer_ngram: 0.867
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
 # [ True]
 
 
 # tfidf_vectorizer_ngram_chars
-# Test ROC AUC forvectorizers[1]: 0.911
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
-# [False]
+# Test ROC AUC for tfidf_vectorizer_ngram_chars: 0.902
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
+# [ True]
 
 print('===========================   Linear Classifier =====================')
 
@@ -170,28 +169,29 @@ for vectorizer in vectorizers:
   
   print('Test ROC AUC for '+vectorizer[1]+': %.3f' %auc)
   #testing a sentence:
-  print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
-  print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
+  print("test for sentence : == whoa == you are a big fat idot stop spamming my userspace")
+  print(clf.predict(['== whoa == you are a big fat idot stop spamming my userspace']))
   print('\n')
 
 #Results:
 
 # count_vectorizer
-# Test ROC AUC forvectorizers[1]: 0.932
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# Test ROC AUC for count_vectorizer: 0.925
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
 # [False]
+
 # tfidf_vectorizer
-# Test ROC AUC forvectorizers[1]: 0.958
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# Test ROC AUC for tfidf_vectorizer_word: 0.953
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
 # [ True]
 # tfidf_vectorizer_ngram
-# Test ROC AUC forvectorizers[1]: 0.882
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
+# Test ROC AUC for tfidf_vectorizer_ngram: 0.873
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
 # [ True]
 # tfidf_vectorizer_ngram_chars
-# Test ROC AUC forvectorizers[1]: 0.956
-# test for sentence : No, I hate my life, Pierre muttered, wincing is
-# [False]
+# Test ROC AUC for tfidf_vectorizer_ngram_chars: 0.949
+# test for sentence :  == whoa == you are a big fat idot stop spamming my userspace
+# [ True]
 
 print('========================= . SVM  Classifier ==================')
 
@@ -217,8 +217,8 @@ for vectorizer in vectorizers:
   
   print('Test ROC AUC for '+vectorizer[1]+': %.3f' %auc)
   #testing a sentence:
-  print("test for sentence : No, I hate my life, Pierre muttered, wincing is")
-  print(clf.predict(['No, I hate my life, Pierre muttered, wincing']))
+  print("test for sentence : == whoa == you are a big fat idot stop spamming my userspace")
+  print(clf.predict(['== whoa == you are a big fat idot stop spamming my userspace']))
   print('\n')
 
 
