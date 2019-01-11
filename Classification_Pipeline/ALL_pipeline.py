@@ -161,3 +161,118 @@ for vectorizer in vectorizers:
   print("test for sentence : == whoa == you are a big fat idot stop spamming my userspace")
   print(clf.predict(['== whoa == you are a big fat idot stop spamming my userspace']))
   print('\n')
+
+################    NEURAL NETWORKS ################
+# Feed forward NN with 1 hidden layer
+def model_FF(xtrain, ytrain, xvalid, yvalid, hidden_size, epochs =1):
+    # create input layer 
+    input_layer = layers.Input((xtrain.shape[1], ), sparse=True)
+    
+    # create hidden layer
+    hidden_layer = layers.Dense(hidden_size, activation="relu")(input_layer)
+    
+    # create output layer
+    output_layer = layers.Dense(4, activation="softmax")(hidden_layer)
+
+    classifier = models.Model(inputs = input_layer, outputs = output_layer)
+    classifier.compile(optimizer='adam', loss='categorical_crossentropy',  metrics=['accuracy'])
+    classifier.fit(xtrain, ytrain,
+                  batch_size=256,
+                  epochs=epochs,
+                  shuffle = True)
+    # scores of the classifier
+    predictions = classifier.predict(xvalid)
+    predictions = predictions.argmax(axis=-1)
+    accuracy = classifier.evaluate(xvalid, yvalid, verbose=0)
+    f1score = metrics.f1_score(valid_y, predictions, average='weighted')
+    return accuracy, f1score
+
+# convert to one_hot
+train_y_onehot = keras.utils.to_categorical(train_y, 4)
+valid_y_onehot = keras.utils.to_categorical(valid_y, 4)
+
+
+# NN Classifier on Count Vectors
+accuracy, f1score = model_FF(xtrain_count, train_y_onehot, xvalid_count, valid_y_onehot, 100)
+print("NN, Count Vectors accuracy:%s     f1 score: %s"% (accuracy[1], f1score))
+
+# NN Classifier on Word Level TF IDF Vectors
+accuracy, f1score = model_FF(xtrain_tfidf, train_y_onehot, xvalid_tfidf, valid_y_onehot, 100)
+print("NN, Count Vectors accuracy:%s     f1 score: %s"% (accuracy[1], f1score))
+
+# NN Classifier on Ngram Level TF IDF Vectors
+accuracy, f1score = model_FF(xtrain_tfidf_ngram, train_y_onehot, xvalid_tfidf_ngram, valid_y_onehot, 100)
+print("NN, Count Vectors accuracy:%s     f1 score: %s"% (accuracy[1], f1score))
+
+# NN Classifier on Count Vectors
+accuracy, f1score = model_FF(xtrain_tfidf_ngram_chars, train_y_onehot, xvalid_tfidf_ngram_chars, valid_y_onehot, 100)
+print("NN, Count Vectors accuracy:%s     f1 score: %s"% (accuracy[1], f1score))
+
+############## Convolution Neural Networks
+
+def cnn(xtrain, ytrain, xvalid, yvalid, epochs = 3):
+    # Add an Input Layer
+    input_layer = layers.Input((70, ))
+
+    # Add the word embedding Layer
+    embedding_layer = layers.Embedding(len(word_index) + 1, 300, weights=[embedding_matrix], trainable=False)(input_layer)
+    embedding_layer = layers.SpatialDropout1D(0.3)(embedding_layer)
+
+    # Add the convolutional Layer
+    conv_layer = layers.Convolution1D(100, 4, activation="relu")(embedding_layer)
+
+    # Add the pooling Layer
+    pooling_layer = layers.GlobalMaxPool1D()(conv_layer)
+
+    # Add the output Layers
+    output_layer1 = layers.Dense(50, activation="relu")(pooling_layer)
+    output_layer1 = layers.Dropout(0.25)(output_layer1)
+    output_layer2 = layers.Dense(4, activation="softmax")(output_layer1)
+
+    # Compile the model
+    model = models.Model(inputs=input_layer, outputs=output_layer2)
+    model.compile(optimizer='adam', loss='categorical_crossentropy',  metrics=['accuracy'])
+    model.fit(xtrain, ytrain,
+              batch_size=256,
+              epochs=epochs)
+    predictions = model.predict(xvalid)
+    predictions = predictions.argmax(axis=-1)
+    accuracy = model.evaluate(xvalid, yvalid, verbose=0)
+    f1score = metrics.f1_score(valid_y, predictions, average='weighted')
+    return accuracy, f1score
+  
+accuracy, f1score = cnn(train_seq_x, train_y_onehot, valid_seq_x, valid_y_onehot)
+print("CNN, Word Embeddings acuuracy accuracy:%s     f1 score: %s"% (accuracy[1], f1score))
+
+########### LSTM #########
+def lstm(xtrain, ytrain, xvalid, yvalid, epochs = 1):
+    # Add an Input Layer
+    input_layer = layers.Input((70, ))
+
+    # Add the word embedding Layer
+    embedding_layer = layers.Embedding(len(word_index) + 1, 300, weights=[embedding_matrix], trainable=False)(input_layer)
+    embedding_layer = layers.SpatialDropout1D(0.3)(embedding_layer)
+
+    # Add the LSTM Layer
+    lstm_layer1 = layers.LSTM(128)(embedding_layer)
+    dropout1 = layers.Dropout(0.5)(lstm_layer1)
+    #lstm_layer2 = layers.LSTM(128)(dropout1)
+    #dropout2 = layers.Dropout(0.5)(lstm_layer2)
+    # Add the output Layers
+    output_layer = layers.Dense(4, activation="softmax")(dropout1)
+
+    # Compile the model
+    model = models.Model(inputs=input_layer, outputs=output_layer)
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.fit(xtrain, ytrain,
+              batch_size=256,
+              epochs=3)
+    
+    predictions = model.predict(xvalid)
+    predictions = predictions.argmax(axis=-1)
+    accuracy = model.evaluate(xvalid, yvalid, verbose=0)
+    f1score = metrics.f1_score(valid_y, predictions, average='weighted')
+    return accuracy, f1score
+    
+accuracy, f1score = lstm(train_seq_x, train_y_onehot, valid_seq_x, valid_y_onehot)
+print("LSTM, Word Embeddings accuracy:%s     f1 score: %s"% (accuracy[1], f1score))
